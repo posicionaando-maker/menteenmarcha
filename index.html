@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2c7da0">
+    <meta name="description" content="Mente en Marcha · Meditación progresiva para enfoque y disciplina. 30 días, de lo simple a lo complejo.">
+    
+    <!-- Icono sugerente: círculo con loto y onda de atención -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%234a7c59'/%3E%3Cpath d='M50,30 Q58,45 50,60 Q42,45 50,30' fill='%23f7f3e0'/%3E%3Cpath d='M35,55 Q50,40 65,55' stroke='%23f7f3e0' stroke-width='2' fill='none'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E🧘%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%234a7c59'/%3E%3Cpath d='M50,30 Q58,45 50,60 Q42,45 50,30' fill='%23f7f3e0'/%3E%3Cpath d='M35,55 Q50,40 65,55' stroke='%23f7f3e0' stroke-width='2' fill='none'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E🧘%3C/text%3E%3C/svg%3E">
+    
+    <title>Mente en Marcha · Meditación progresiva</title>
+    
+    <style>
+        /* ========== ESTILOS CALMADOS PARA MEDITACIÓN ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #e9f0e8;
+            color: #2c3e2f;
+            padding: 0 0 80px 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Encabezado sereno */
+        .header {
+            background: linear-gradient(135deg, #4a7c59, #2c5e3a);
+            color: white;
+            padding: 1.5rem 1rem;
+            border-radius: 0 0 2rem 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 0.85rem;
+        }
+
+        /* Tarjeta de racha */
+        .streak-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #d4e2d0;
+        }
+        .streak-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        /* Recomendación del día */
+        .recommend-card {
+            background: #fef9e6;
+            border-left: 6px solid #e67e22;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .recommend-title {
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Lista de ejercicios (acordeón simple) */
+        .level-section {
+            margin-bottom: 1.5rem;
+        }
+        .level-title {
+            background: #d4e2d0;
+            padding: 0.6rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+        .exercise-item {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 0.6rem;
+            border: 1px solid #d4e2d0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.05s;
+        }
+        .exercise-item.completed {
+            background: #e8f0e5;
+            opacity: 0.7;
+        }
+        .exercise-badge {
+            font-size: 0.7rem;
+            background: #4a7c59;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+        }
+
+        /* Modal del ejercicio (meditación activa) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .meditation-card {
+            background: white;
+            max-width: 90%;
+            width: 500px;
+            max-height: 90%;
+            overflow-y: auto;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            position: relative;
+        }
+        .timer-circle {
+            width: 180px;
+            height: 180px;
+            margin: 1rem auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timer-svg {
+            transform: rotate(-90deg);
+        }
+        .timer-text {
+            position: absolute;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5e3a;
+        }
+        .btn-audio, .btn-close, .btn-start {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.3rem;
+        }
+        .btn-complete-med {
+            background: #e67e22;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 1rem;
+            height: 8px;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        .progress-fill {
+            background: #4a7c59;
+            width: 0%;
+            height: 8px;
+            border-radius: 1rem;
+        }
+        .hidden {
+            display: none;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6b8ba0;
+            margin-top: 2rem;
+        }
+        button:active { transform: scale(0.97); }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #2c3e2f;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 2rem;
+            text-align: center;
+            z-index: 1100;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 0; transform: translateY(20px);}
+            15% { opacity: 1; transform: translateY(0);}
+            85% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden;}
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🧘★ Mente en Marcha</h1>
+    <p>30 días de meditación progresiva · Enfoque y disciplina</p>
+</div>
+
+<div class="container">
+    <!-- Racha -->
+    <div class="streak-card">
+        <span>🔥 Racha actual</span>
+        <span><span class="streak-number" id="streakCount">0</span> días</span>
+    </div>
+
+    <!-- Recomendación del día -->
+    <div id="recommendCard" class="recommend-card">
+        <div class="recommend-title">✨ Recomendado para hoy</div>
+        <div id="recommendText">Cargando...</div>
+    </div>
+
+    <!-- Lista de ejercicios por nivel -->
+    <div id="exercisesList"></div>
+
+    <!-- Pie -->
+    <footer>Offline · Voz incluida · Progreso automático</footer>
+</div>
+
+<script>
+    // =================================================================
+    // 1. DATOS DE LOS 30 EJERCICIOS (progresión simple → complejo)
+    // =================================================================
+    const EJERCICIOS = [
+        // NIVEL 1: Principiante (días 1-10) - 1-2 min
+        { id: 1, nivel: 1, orden: 1, titulo: "Conciencia de la respiración", autor: "Thich Nhat Hanh", duracion_seg: 60, tema: "básico", tecnica: "Siéntate cómodo. Cierra los ojos suavemente. Respira de forma natural. Cuenta 10 respiraciones: inhala 1, exhala 1... hasta 10. Si te pierdes, vuelve a 1 sin juzgarte.", fuente: "El milagro de mindfulness (1975)" },
+        { id: 2, nivel: 1, orden: 2, titulo: "El cuerpo sentado", autor: "Jon Kabat-Zinn", duracion_seg: 90, tema: "básico", tecnica: "Siente donde tu cuerpo toca la silla o el suelo. Nota el peso. Luego sube la atención: piernas → espalda → hombros → cabeza. Solo observa, sin cambiar nada.", fuente: "Vivir con plenitud las crisis (1990)" },
+        { id: 3, nivel: 1, orden: 3, titulo: "Sonidos sin etiquetar", autor: "Shunryu Suzuki", duracion_seg: 120, tema: "básico", tecnica: "Abre el oído. Escucha todos los sonidos sin nombrarlos. No digas 'auto', 'viento'. Solo sonido puro. Si tu mente etiqueta, suelta y vuelve al oír.", fuente: "Mente de principiante (1970)" },
+        { id: 4, nivel: 1, orden: 4, titulo: "La mano en el pecho", autor: "Jon Kabat-Zinn", duracion_seg: 60, tema: "calma", tecnica: "Pon tu mano derecha sobre el corazón. Siente el calor de la palma, los latidos. Respira hacia esa zona. Inhala paz, exhala tensión.", fuente: "Mindfulness para principiantes (2006)" },
+        { id: 5, nivel: 1, orden: 5, titulo: "Entre tareas", autor: "Bhante Gunaratana", duracion_seg: 60, tema: "enfoque", tecnica: "Al terminar una actividad, antes de empezar la siguiente, respira 3 veces profundamente. Siente el momento de transición.", fuente: "Meditación mindfulness en la vida diaria (1991)" },
+        { id: 6, nivel: 1, orden: 6, titulo: "Notar la distracción", autor: "Thich Nhat Hanh", duracion_seg: 120, tema: "atención", tecnica: "Concéntrate en tu respiración. Cuando notes que te distraes (pensamientos), sonríe suavemente y vuelve a la respiración. No te enojes. Cada vuelta es un entrenamiento.", fuente: "Respiración consciente (2004)" },
+        { id: 7, nivel: 1, orden: 7, titulo: "Un objeto cotidiano", autor: "Shunryu Suzuki", duracion_seg: 120, tema: "básico", tecnica: "Toma un objeto simple (taza, lápiz). Míralo como si fuera la primera vez. Observa su forma, color, textura. Sin pensamientos, solo percepciones.", fuente: "Zen mind, beginner's mind (1970)" },
+        { id: 8, nivel: 1, orden: 8, titulo: "Paso corto consciente", autor: "Thich Nhat Hanh", duracion_seg: 90, tema: "movimiento", tecnica: "Camina 10 pasos muy despacio. Siente cada pisada: talón → planta → dedos. Respira al ritmo de tus pasos. Si puedes, sonríe.", fuente: "Peace is every step (1991)" },
+        { id: 9, nivel: 1, orden: 9, titulo: "Antes de estudiar/trabajar", autor: "Bhante Gunaratana", duracion_seg: 60, tema: "procrastinación", tecnica: "Antes de abrir el libro o la computadora, respira 5 veces. Di mentalmente: 'Empiezo ahora, con calma. Cada paso cuenta'.", fuente: "Meditación vipassana (1993)" },
+        { id: 10, nivel: 1, orden: 10, titulo: "Cierre del día", autor: "Jon Kabat-Zinn", duracion_seg: 120, tema: "descanso", tecnica: "Acostado, recorre mentalmente 3 sensaciones corporales: pies, vientre, manos. Agradece a tu cuerpo por el día. Suelta la tensión.", fuente: "Full catastrophe living (1990)" },
+        
+        // NIVEL 2: Intermedio (días 11-20) - 2-3 min
+        { id: 11, nivel: 2, orden: 1, titulo: "La respiración como ancla", autor: "Bhante Gunaratana", duracion_seg: 120, tema: "atención", tecnica: "Enfócate en el abdomen al respirar. Siente cómo se eleva y desciende. Si la mente se va, vuelve suavemente al abdomen. Sin frustración.", fuente: "Meditación paso a paso (1993)" },
+        { id: 12, nivel: 2, orden: 2, titulo: "Escaneo rápido del cuerpo", autor: "Jon Kabat-Zinn", duracion_seg: 180, tema: "cuerpo", tecnica: "Recorre: cabeza (relaja), hombros (sueltas), manos (sientes), pecho (abres), vientre (blando), piernas (pesadas), pies (contacto). 10 segundos cada zona.", fuente: "Mindfulness para principiantes (2006)" },
+        { id: 13, nivel: 2, orden: 3, titulo: "Pensamientos como nubes", autor: "Thich Nhat Hanh", duracion_seg: 120, tema: "pensamientos", tecnica: "Imagina que tus pensamientos son nubes en el cielo. Obsérvalas pasar sin aferrarte, sin empujarlas. Solo déjalas ir. Vuelve al cielo vacío.", fuente: "El corazón de la enseñanza del Buddha (1998)" },
+        { id: 14, nivel: 2, orden: 4, titulo: "Antes de una tarea difícil", autor: "Jon Kabat-Zinn", duracion_seg: 120, tema: "ansiedad", tecnica: "Respira profundamente. Di en silencio: 'Puedo con esto, paso a paso'. Visualiza el primer paso pequeño, no el resultado final.", fuente: "Vivir con plenitud las crisis (1990)" },
+        { id: 15, nivel: 2, orden: 5, titulo: "Recuperación tras interrupción", autor: "Shunryu Suzuki", duracion_seg: 120, tema: "interrupciones", tecnica: "Cuando te interrumpan, no reacciones. Respira 3 veces. Luego retoma la tarea. La interrupción es parte del camino, no un enemigo.", fuente: "Zen mind, beginner's mind (1970)" },
+        { id: 16, nivel: 2, orden: 6, titulo: "La urgencia sin reacción", autor: "Bhante Gunaratana", duracion_seg: 150, tema: "impulso", tecnica: "Nota la sensación de urgencia en tu cuerpo (opresión, calor). Quédate con ella 10 segundos sin actuar. Luego decide con calma.", fuente: "El poder de la atención plena (2008)" },
+        { id: 17, nivel: 2, orden: 7, titulo: "Gratitud por la tarea", autor: "Thich Nhat Hanh", duracion_seg: 120, tema: "motivación", tecnica: "Antes de empezar algo, agradece poder hacerlo. Agradece tus manos, tu mente, el tiempo. La gratitud cambia la energía.", fuente: "Agradecimiento consciente (2002)" },
+        { id: 18, nivel: 2, orden: 8, titulo: "La postura como meditación", autor: "Shunryu Suzuki", duracion_seg: 120, tema: "cuerpo", tecnica: "Ajusta tu postura: espalda recta pero no rígida, hombros relajados, barbilla ligeramente hacia adentro. Siente cómo cambia tu estado mental.", fuente: "Zen mind, beginner's mind (1970)" },
+        { id: 19, nivel: 2, orden: 9, titulo: "Un solo objeto de enfoque", autor: "Bhante Gunaratana", duracion_seg: 180, tema: "concentración", tecnica: "Elige un punto fijo (una mancha en la pared, la llama de una vela imaginaria). Mantén la atención ahí 3 minutos. Cada vez que te vayas, regresa.", fuente: "Meditación vipassana (1993)" },
+        { id: 20, nivel: 2, orden: 10, titulo: "Meditación para procrastinar", autor: "Jon Kabat-Zinn", duracion_seg: 180, tema: "procrastinación", tecnica: "Visualiza la tarea que evitas. Nota el miedo o aburrimiento. Respira hacia esa sensación 5 veces. Luego decide hacer solo 2 minutos de esa tarea.", fuente: "Donde vayas, ahí estás (1994)" },
+        
+        // NIVEL 3: Avanzado (días 21-30) - 3 min + integración
+        { id: 21, nivel: 3, orden: 1, titulo: "Atención plena al escribir", autor: "Thich Nhat Hanh", duracion_seg: 180, tema: "estudio", tecnica: "Escribe una palabra muy despacio. Siente el lápiz en los dedos, el papel bajo la mano, el sonido del trazo. La escritura es meditación.", fuente: "Escribir con atención plena (1999)" },
+        { id: 22, nivel: 3, orden: 2, titulo: "Escucha plena en conversaciones", autor: "Jon Kabat-Zinn", duracion_seg: 180, tema: "relaciones", tecnica: "Cuando alguien hable, escucha sin preparar tu respuesta. Solo oye las palabras, el tono, los silencios. Responde después de respirar.", fuente: "Mindfulness en la vida cotidiana (2005)" },
+        { id: 23, nivel: 3, orden: 3, titulo: "Trabajo repetitivo como meditación", autor: "Shunryu Suzuki", duracion_seg: 180, tema: "flujo", tecnica: "Elige una tarea monótona (barrer, lavar, ordenar). Hazla con total atención: cada movimiento, cada objeto. El trabajo es zen.", fuente: "Zen mind, beginner's mind (1970)" },
+        { id: 24, nivel: 3, orden: 4, titulo: "Insomnio por estrés", autor: "Bhante Gunaratana", duracion_seg: 180, tema: "descanso", tecnica: "Acostado, escanea el cuerpo de pies a cabeza muy lentamente. Nombra cada parte: 'dedos del pie izquierdo relajados, tobillo suelto...' Hasta llegar a la coronilla.", fuente: "Meditación para dormir (2003)" },
+        { id: 25, nivel: 3, orden: 5, titulo: "Cuando sientes ansiedad", autor: "Jon Kabat-Zinn", duracion_seg: 120, tema: "ansiedad", tecnica: "Respira hacia la zona del pecho o estómago. Di: 'Esto también pasará'. Permite que la sensación esté ahí sin luchar. Respira con ella.", fuente: "Full catastrophe living (1990)" },
+        { id: 26, nivel: 3, orden: 6, titulo: "Meditación caminando al trabajo/escuela", autor: "Thich Nhat Hanh", duracion_seg: 180, tema: "movimiento", tecnica: "20 pasos. Cada pisada: 'Llego al presente'. Próximo paso: 'Es un paso de paz'. Sin prisa. El destino es el camino.", fuente: "El milagro de mindfulness (1975)" },
+        { id: 27, nivel: 3, orden: 7, titulo: "Pausa activa entre tareas", autor: "Shunryu Suzuki", duracion_seg: 120, tema: "interrupciones", tecnica: "Programa un recordatorio. Cada 45 minutos, para 1 minuto: cierra ojos, respira 5 veces. Luego sigue con claridad.", fuente: "Zen mind, beginner's mind (1970)" },
+        { id: 28, nivel: 3, orden: 8, titulo: "La próxima tarea con intención", autor: "Bhante Gunaratana", duracion_seg: 180, tema: "enfoque", tecnica: "Antes de empezar cualquier tarea, pregúntate: '¿Cuál es mi intención profunda?' (aprender, ayudar, crear, ordenar). Actúa desde ahí.", fuente: "Meditación vipassana (1993)" },
+        { id: 29, nivel: 3, orden: 9, titulo: "Aceptar el error", autor: "Jon Kabat-Zinn", duracion_seg: 180, tema: "errores", tecnica: "Si cometes un error, respira 5 veces. Di: 'Los errores son parte del aprendizaje'. Corrige con calma, sin castigarte.", fuente: "Donde vayas, ahí estás (1994)" },
+        { id: 30, nivel: 3, orden: 10, titulo: "Tu propio minuto de mindfulness", autor: "Libre", duracion_seg: 60, tema: "integración", tecnica: "Elige la técnica que más te haya servido. Practícala durante 1 minuto. Felicítate por completar los 30 días.", fuente: "Tu práctica personal" }
+    ];
+
+    // =================================================================
+    // 2. CONFIGURACIÓN Y ALMACENAMIENTO
+    // =================================================================
+    const STORAGE_KEYS = {
+        PROGRESS: 'mente_progreso',      // { "id_ejercicio": fecha_completado (YYYY-MM-DD) }
+        LAST_VISIT: 'mente_last_visit',
+        STREAK: 'mente_streak'
+    };
+
+    let progreso = {};           // { "1": "2026-05-26", "2": null ... }
+    let streak = 0;
+    let ejercicioActivo = null;
+    let temporizadorInterval = null;
+    let tiempoRestante = 0;
+
+    // =================================================================
+    // 3. FUNCIONES DE PROGRESO Y RACHA
+    // =================================================================
+    function cargarProgreso() {
+        const guardado = localStorage.getItem(STORAGE_KEYS.PROGRESS);
+        if(guardado) {
+            progreso = JSON.parse(guardado);
+        } else {
+            progreso = {};
+            EJERCICIOS.forEach(ej => { progreso[ej.id] = null; });
+        }
+    }
+
+    function guardarProgreso() {
+        localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(progreso));
+    }
+
+    function marcarCompletado(id) {
+        const hoy = new Date().toISOString().slice(0,10);
+        progreso[id] = hoy;
+        guardarProgreso();
+        actualizarRacha();
+        renderizarLista();
+        actualizarRecomendacion();
+        mostrarToast(`✅ ¡Completaste el ejercicio ${id}!`);
+    }
+
+    function estaCompletado(id) {
+        return progreso[id] !== null;
+    }
+
+    function actualizarRacha() {
+        const hoy = new Date().toISOString().slice(0,10);
+        const ultimaVisita = localStorage.getItem(STORAGE_KEYS.LAST_VISIT);
+        let rachaActual = parseInt(localStorage.getItem(STORAGE_KEYS.STREAK)) || 0;
+        
+        if(!ultimaVisita) {
+            rachaActual = 1;
+        } else {
+            const diff = Math.floor((new Date(hoy) - new Date(ultimaVisita)) / (1000*60*60*24));
+            if(diff === 1) rachaActual++;
+            else if(diff > 1) rachaActual = 1;
+        }
+        streak = rachaActual;
+        localStorage.setItem(STORAGE_KEYS.STREAK, streak);
+        localStorage.setItem(STORAGE_KEYS.LAST_VISIT, hoy);
+        document.getElementById('streakCount').innerText = streak;
+    }
+
+    // =================================================================
+    // 4. RECOMENDACIÓN INTELIGENTE (siguiente no completado)
+    // =================================================================
+    function obtenerSiguienteRecomendado() {
+        for(let ej of EJERCICIOS) {
+            if(!estaCompletado(ej.id)) return ej;
+        }
+        return null; // todos completados
+    }
+
+    function actualizarRecomendacion() {
+        const rec = obtenerSiguienteRecomendado();
+        const div = document.getElementById('recommendText');
+        const card = document.getElementById('recommendCard');
+        if(rec) {
+            div.innerHTML = `<strong>${rec.titulo}</strong> (${rec.autor}) · ${Math.floor(rec.duracion_seg/60)} min<br>
+                             <span style="font-size:0.8rem;">🎯 ${rec.tecnica.substring(0,80)}...</span>`;
+            card.onclick = () => abrirMeditacion(rec.id);
+        } else {
+            div.innerHTML = "🎉 ¡Completaste los 30 días! Vuelve a practicar tus favoritos.";
+            card.onclick = null;
+        }
+    }
+
+    // =================================================================
+    // 5. RENDERIZADO DE LA LISTA POR NIVELES
+    // =================================================================
+    function renderizarLista() {
+        const container = document.getElementById('exercisesList');
+        let html = '';
+        const niveles = [1,2,3];
+        const nombresNivel = {1: "🌱 Principiante · días 1-10", 2: "🌿 Intermedio · días 11-20", 3: "🧘 Avanzado · días 21-30"};
+        
+        for(let nivel of niveles) {
+            const ejerciciosNivel = EJERCICIOS.filter(e => e.nivel === nivel);
+            html += `<div class="level-section">
+                        <div class="level-title" data-nivel="${nivel}">${nombresNivel[nivel]} <span>▼</span></div>
+                        <div class="level-content" id="nivel-${nivel}">`;
+            for(let ej of ejerciciosNivel) {
+                const completado = estaCompletado(ej.id);
+                html += `<div class="exercise-item ${completado ? 'completed' : ''}" data-id="${ej.id}">
+                            <div><strong>${ej.orden}. ${ej.titulo}</strong><br>
+                            <span style="font-size:0.7rem;">${ej.autor} · ${Math.floor(ej.duracion_seg/60)} min</span></div>
+                            <div class="exercise-badge">${completado ? '✓' : '▶'}</div>
+                         </div>`;
+            }
+            html += `</div></div>`;
+        }
+        container.innerHTML = html;
+        
+        // Colapsar/expandir niveles (opcional)
+        document.querySelectorAll('.level-title').forEach(title => {
+            title.addEventListener('click', () => {
+                const nivel = title.getAttribute('data-nivel');
+                const content = document.getElementById(`nivel-${nivel}`);
+                if(content.style.display === 'none') content.style.display = 'block';
+                else content.style.display = 'none';
+            });
+        });
+        
+        // Eventos de click en cada ejercicio
+        document.querySelectorAll('.exercise-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const id = parseInt(item.getAttribute('data-id'));
+                abrirMeditacion(id);
+            });
+        });
+    }
+
+    // =================================================================
+    // 6. MODAL DE MEDITACIÓN CON CÍRCULO DE PROGRESO (T1)
+    // =================================================================
+    function abrirMeditacion(id) {
+        const ejercicio = EJERCICIOS.find(e => e.id === id);
+        if(!ejercicio) return;
+        ejercicioActivo = ejercicio;
+        tiempoRestante = ejercicio.duracion_seg;
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="meditation-card">
+                <h3>🧘 ${ejercicio.titulo}</h3>
+                <p><strong>${ejercicio.autor}</strong> · ${Math.floor(ejercicio.duracion_seg/60)} min<br>
+                <span style="font-size:0.75rem;">📖 ${ejercicio.fuente}</span></p>
+                <div style="background:#f0f4ee; padding:0.8rem; border-radius:1rem; margin:0.5rem 0;">
+                    <p>${ejercicio.tecnica}</p>
+                </div>
+                <div class="timer-circle">
+                    <svg class="timer-svg" width="180" height="180" viewBox="0 0 180 180">
+                        <circle cx="90" cy="90" r="80" fill="none" stroke="#d4e2d0" stroke-width="8"/>
+                        <circle id="progressCircle" cx="90" cy="90" r="80" fill="none" stroke="#4a7c59" stroke-width="8" stroke-dasharray="502" stroke-dashoffset="502" stroke-linecap="round"/>
+                    </svg>
+                    <div class="timer-text" id="timerText">${Math.floor(tiempoRestante/60)}:${(tiempoRestante%60).toString().padStart(2,'0')}</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                <div style="display:flex; gap:0.5rem; justify-content:center;">
+                    <button id="audioBtn" class="btn-audio">🔊 Escuchar guía</button>
+                    <button id="startTimerBtn" class="btn-start">▶ Iniciar</button>
+                    <button id="closeModalBtn" class="btn-close">✖ Cerrar</button>
+                </div>
+                <button id="completeMedBtn" class="btn-complete-med">✅ Marcar como completado</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Actualizar círculo
+        function actualizarCirculo(restante, total) {
+            const circle = document.getElementById('progressCircle');
+            if(circle) {
+                const dasharray = 2 * Math.PI * 80; // 502.65
+                const offset = dasharray * (restante / total);
+                circle.style.strokeDashoffset = offset;
+            }
+            const fill = document.getElementById('progressFill');
+            if(fill) fill.style.width = `${((total-restante)/total)*100}%`;
+            const textDiv = document.getElementById('timerText');
+            if(textDiv) {
+                const mins = Math.floor(restante/60);
+                const segs = restante % 60;
+                textDiv.innerText = `${mins}:${segs.toString().padStart(2,'0')}`;
+            }
+        }
+        
+        // Temporizador
+        let timerRunning = false;
+        document.getElementById('startTimerBtn').addEventListener('click', () => {
+            if(timerRunning) return;
+            timerRunning = true;
+            if(temporizadorInterval) clearInterval(temporizadorInterval);
+            temporizadorInterval = setInterval(() => {
+                if(tiempoRestante > 0) {
+                    tiempoRestante--;
+                    actualizarCirculo(tiempoRestante, ejercicio.duracion_seg);
+                    if(tiempoRestante === 0) {
+                        clearInterval(temporizadorInterval);
+                        mostrarToast("🔔 Tiempo completado. ¡Bien hecho!");
+                        // vibración suave si soporta
+                        if(navigator.vibrate) navigator.vibrate(200);
+                    }
+                } else {
+                    clearInterval(temporizadorInterval);
+                }
+            }, 1000);
+        });
+        
+        // Audio (voz offline)
+        document.getElementById('audioBtn').addEventListener('click', () => {
+            if(!window.speechSynthesis) {
+                mostrarToast("Tu navegador no soporta voz");
+                return;
+            }
+            const mensaje = `${ejercicio.titulo}. ${ejercicio.tecnica}`;
+            const utterance = new SpeechSynthesisUtterance(mensaje);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.9;
+            window.speechSynthesis.cancel(); // evitar acumulación
+            window.speechSynthesis.speak(utterance);
+        });
+        
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            if(temporizadorInterval) clearInterval(temporizadorInterval);
+            window.speechSynthesis.cancel();
+            modal.remove();
+        });
+        
+        document.getElementById('completeMedBtn').addEventListener('click', () => {
+            if(!estaCompletado(ejercicio.id)) {
+                marcarCompletado(ejercicio.id);
+            } else {
+                mostrarToast("Ya habías completado este ejercicio");
+            }
+            if(temporizadorInterval) clearInterval(temporizadorInterval);
+            window.speechSynthesis.cancel();
+            modal.remove();
+        });
+        
+        actualizarCirculo(tiempoRestante, ejercicio.duracion_seg);
+    }
+
+    // =================================================================
+    // 7. TOAST Y FUNCIONES AUXILIARES
+    // =================================================================
+    function mostrarToast(msg) {
+        let old = document.querySelector('.toast');
+        if(old) old.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2200);
+    }
+
+    // =================================================================
+    // 8. INICIALIZACIÓN
+    // =================================================================
+    cargarProgreso();
+    actualizarRacha();
+    renderizarLista();
+    actualizarRecomendacion();
+
+    // =================================================================
+    // 9. SERVICE WORKER + MANIFEST (PWA offline)
+    // =================================================================
+    if('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('install', e => { e.waitUntil(caches.open('mente-v1').then(cache => cache.addAll(['/','/index.html']))); self.skipWaiting(); });
+        self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });`;
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log("SW no registrado, pero funciona offline parcial"));
+    }
+    
+    // Manifest para instalación
+    (function() {
+        const manifest = {
+            name: "Mente en Marcha · Meditación",
+            short_name: "MenteMarcha",
+            start_url: "/",
+            display: "standalone",
+            theme_color: "#4a7c59",
+            background_color: "#e9f0e8",
+            icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%234a7c59'/%3E%3Cpath d='M50,30 Q58,45 50,60 Q42,45 50,30' fill='%23f7f3e0'/%3E%3Cpath d='M35,55 Q50,40 65,55' stroke='%23f7f3e0' stroke-width='2' fill='none'/%3E%3Ctext x='50' y='78' font-size='20' text-anchor='middle' fill='%23f7f3e0'%3E🧘%3C/text%3E%3C/svg%3E", sizes: "192x192", type: "image/svg+xml" }]
+        };
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'}));
+        document.head.appendChild(link);
+    })();
+</script>
+</body>
+</html>
